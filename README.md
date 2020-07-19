@@ -39,3 +39,18 @@ Auto Fork is deployed to elastic beanstalk Docker runtime with the EB manifest f
 Builds are handled by DockerHub. On commit to master, the image builds and is tagged with `latest`. Final image resides at `kyrick/autofork`
 
 You can build locally by running `docker build . -t autofork` in the project directory.
+
+# Configuration
+
+```
+Important
+AF_SECRET_KEY: Flask session secret key. This is important and must be set per environment.
+AF_CLIENT_ID: GitHub OAuth app client ID (get this from GitHub)
+AF_CLIENT_SECRET: GitHub OAuth app client secret (get this from GitHub)
+
+Optional
+AF_FORK_ENDPOINT: Public repo to be forked. Format: https://api.github.com/repos/:user-name/:repo-name/forks
+AF_AUTH_ENDPOINT: The GitHub endpoint for OAuth app Authorization
+AF_TOKEN_ENDPOINT: The GitHub endpoint for user Access Tokens after Authorization has been granted 
+```
+
