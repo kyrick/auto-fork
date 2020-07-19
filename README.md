@@ -6,11 +6,20 @@ Once authentication is complete the user can click a button to fork the code bas
 
 [Click here to try out the service running Elastic Beanstalk!](http://auto-fork.us-east-1.elasticbeanstalk.com) 
 
-# Rationale
+# Rationale and Decisions
 
 
 
 # Tests
+
+Unit tests are built with pytest and live under `auto_fork/tests/`
+* `test_app.py` contains the Auto Fork unit tests
+* `mock_response.py` is used for mocking responses from GitHub in unit tests. example: monkeypatch.setattr(requests, "post", mock_post(202, {'some', 'data'})
+
+To execute tests:
+1. In terminal cd to project directory
+1. `pip install -r requirements.txt`
+1. `pytest -v`
 
 # Run locally
 
