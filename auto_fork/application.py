@@ -15,10 +15,13 @@ def index():
 
     auth_endpoint = parse.urljoin(request.base_url, '/auth')
 
-    params = {'client_id': AppConfig.client_id, 'state': state, 'scope': 'repo', 'redirect_uri': auth_endpoint}
-    ask_for_auth_url = "https://github.com/login/oauth/authorize?" + parse.urlencode(params)
+    params = {'client_id': AppConfig.github.client_id,
+              'state': state,
+              'scope': 'public_repo',
+              'redirect_uri': auth_endpoint}
+    authorize_url = f"{AppConfig.github.authorize_endpoint}?" + parse.urlencode(params)
 
-    return f'<a href="{ask_for_auth_url}">Click Here to Surrender to Auto Fork</a>'
+    return f'<a href="{authorize_url}">Click Here to Surrender to Auto Fork</a>'
 
 
 @application.route("/auth", methods=['GET'])
@@ -27,11 +30,14 @@ def auth():
     state = request.args.get("state")
 
     # verify this is a response to our request
-    if state == session.get('auto_fork_state') and code is not None:
+    if state == session.pop('auto_fork_state') and code is not None:
         headers = {'Accept': 'application/json'}
-        payload = {'code': code, 'client_id': AppConfig.client_id, 'client_secret': AppConfig.client_secret,
-                   'scope': 'repo'}
-        res = post("https://github.com/login/oauth/access_token", headers=headers, json=payload)
+        payload = {'code': code,
+                   'client_id': AppConfig.github.client_id,
+                   'client_secret': AppConfig.github.client_secret,
+                   'scope': 'public_repo'}
+        res = post(AppConfig.github.token_endpoint, headers=headers, json=payload)
+
         data = res.json()
         access_token = data['access_token']
         session['github_access_token'] = access_token
@@ -45,7 +51,7 @@ def auth():
 def fork():
     access_token = session['github_access_token']
     headers = {'Authorization': f'token {access_token}'}
-    res = post(AppConfig.repo_fork_endpoint, headers=headers)
+    res = post(AppConfig.github.fork_endpoint, headers=headers)
     return "forked"
 
 
