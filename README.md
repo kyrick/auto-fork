@@ -7,8 +7,9 @@
 The app uses a GitHub OAuth app to service authentication. 
 Once authentication is complete the user can click a button to fork the code base into their github account.
 
-# Tests
 
+
+# Tests
 
 # Run locally
 
@@ -25,3 +26,16 @@ Before running locally, you will need a GitHub OAuth app. [Learn more about sett
 1. `docker build . -t autofork`
 1. `docker run -d -p 5000:5000 --env-file .env autofork`
 
+# Deployment 
+
+Auto Fork is deployed to elastic beanstalk Docker runtime with the EB manifest file.
+
+1. create an EB environment using the Docker platform
+1. upload `deploy/Dockerrun.aws.json`
+1. configure environment variables in the eb console for AF_CLIENT_ID and AF_CLIENT_SECRET  
+
+# Build
+
+Builds are handled by DockerHub. On commit to master, the image builds and is tagged with `latest`. Final image resides at `kyrick/autofork`
+
+You can build locally by running `docker build . -t autofork` in the project directory.
