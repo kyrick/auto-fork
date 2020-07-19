@@ -1,14 +1,15 @@
 from flask import Flask, session, request
 from requests import post
 from urllib import parse
+from waitress import serve
 import uuid
 from config import AppConfig
 
-application = Flask(__name__)
-application.config.from_object(AppConfig.flask)
+app = Flask(__name__)
+app.config.from_object(AppConfig.flask)
 
 
-@application.route("/")
+@app.route("/")
 def index():
     state = str(uuid.uuid4())
     session['auto_fork_state'] = state
@@ -24,7 +25,7 @@ def index():
     return f'<a href="{authorize_url}">Click Here to Surrender to Auto Fork</a>'
 
 
-@application.route("/auth", methods=['GET'])
+@app.route("/auth", methods=['GET'])
 def auth():
     code = request.args.get("code")
     state = request.args.get("state")
@@ -47,7 +48,7 @@ def auth():
         return "Request could not be validated"
 
 
-@application.route("/fork", methods=['GET'])
+@app.route("/fork", methods=['GET'])
 def fork():
     access_token = session['github_access_token']
     headers = {'Authorization': f'token {access_token}'}
@@ -56,4 +57,4 @@ def fork():
 
 
 if __name__ == "__main__":
-    application.run(host='0.0.0.0')
+    serve(app, host='0.0.0.0', port=5000)

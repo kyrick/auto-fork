@@ -6,4 +6,4 @@ ADD /auto_fork .
 
 RUN pip install -r requirements.txt
 
-CMD ["python","application.py"]
+CMD ["python","app.py"]

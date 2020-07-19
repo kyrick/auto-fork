@@ -1,15 +1,15 @@
 # Auto Fork
 
-[Click here to try out the service](http://auto-fork.us-east-1.elasticbeanstalk.com) 
+[Click here to try out the service running Elastic Beanstalk!](http://auto-fork.us-east-1.elasticbeanstalk.com) 
 
 
 `Auto Fork` is a Python Flask app that forks it's own repository to the users account.
 The app uses a GitHub OAuth app to service authentication. 
 Once authentication is complete the user can click a button to fork the code base into their github account.
 
-
-
 # Tests
+
+
 
 # Run locally
 
