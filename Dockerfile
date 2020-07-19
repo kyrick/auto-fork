@@ -4,6 +4,6 @@ WORKDIR /app
 ADD requirements.txt .
 ADD /auto_fork .
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements-prod.txt
 
 CMD ["python","app.py"]

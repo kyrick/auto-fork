@@ -1,15 +1,16 @@
 # Auto Fork
 
-[Click here to try out the service running Elastic Beanstalk!](http://auto-fork.us-east-1.elasticbeanstalk.com) 
-
-
 `Auto Fork` is a Python Flask app that forks it's own repository to the users account.
 The app uses a GitHub OAuth app to service authentication. 
 Once authentication is complete the user can click a button to fork the code base into their github account.
 
+[Click here to try out the service running Elastic Beanstalk!](http://auto-fork.us-east-1.elasticbeanstalk.com) 
+
+# Rationale
+
+
+
 # Tests
-
-
 
 # Run locally
 
@@ -28,17 +29,19 @@ Before running locally, you will need a GitHub OAuth app. [Learn more about sett
 
 # Deployment 
 
-Auto Fork is deployed to elastic beanstalk Docker runtime with the EB manifest file.
+Auto Fork is deployed to elastic beanstalk Docker runtime with the EB manifest file in the deploy folder.
 
-1. create an EB environment using the Docker platform
-1. upload `deploy/Dockerrun.aws.json`
-1. configure environment variables in the eb console for AF_CLIENT_ID and AF_CLIENT_SECRET  
+1. Create an EB environment utilizing the Docker platform
+1. Upload manifest `deploy/Dockerrun.aws.json`
+1. Configure environment variables for AF_CLIENT_ID and AF_CLIENT_SECRET  
 
 # Build
 
 Builds are handled by DockerHub. On commit to master, the image builds and is tagged with `latest`. Final image resides at `kyrick/autofork`
 
 You can build locally by running `docker build . -t autofork` in the project directory.
+
+[Click here to view Auto Fork in DockerHub](https://hub.docker.com/r/kyrick/autofork)
 
 # Configuration
 

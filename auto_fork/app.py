@@ -1,6 +1,6 @@
 from flask import Flask, session, request, make_response, render_template
 from werkzeug import exceptions
-from requests import post
+import requests
 from urllib import parse
 from waitress import serve
 import uuid
@@ -45,7 +45,7 @@ def auth():
                    'client_id': AppConfig.github.client_id,
                    'client_secret': AppConfig.github.client_secret,
                    'scope': 'public_repo'}
-        res = post(AppConfig.github.token_endpoint, headers=headers, json=payload)
+        res = requests.post(AppConfig.github.token_endpoint, headers=headers, json=payload)
 
         if res.status_code == 200:
             data = res.json()
@@ -68,20 +68,19 @@ def fork():
     else:
         access_token = session['github_access_token']
         headers = {'Authorization': f'token {access_token}'}
-        forked_res = post(AppConfig.github.fork_endpoint, headers=headers)
+        forked_res = requests.post(AppConfig.github.fork_endpoint, headers=headers)
 
         if forked_res.status_code == 202:
             base_url = parse.urljoin(request.base_url, '/')
             response = make_response(render_template('forked.html', base_url=base_url))
         elif forked_res.status_code == 403:
-            raise exceptions.Unauthorized
+            raise exceptions.Forbidden
         else:
             raise exceptions.ServiceUnavailable
 
     return response
 
 
-@app.errorhandler(exceptions.Unauthorized)
 @app.errorhandler(exceptions.NotAcceptable)
 @app.errorhandler(exceptions.Forbidden)
 @app.errorhandler(exceptions.ServiceUnavailable)
