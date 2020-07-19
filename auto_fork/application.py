@@ -4,10 +4,11 @@ from urllib import parse
 import uuid
 from config import AppConfig
 
-app = Flask(__name__)
+application = Flask(__name__)
+application.config.from_object(AppConfig.flask)
 
 
-@app.route("/")
+@application.route("/")
 def index():
     state = str(uuid.uuid4())
     session['auto_fork_state'] = state
@@ -20,7 +21,7 @@ def index():
     return f'<a href="{ask_for_auth_url}">Click Here to Surrender to Auto Fork</a>'
 
 
-@app.route("/auth", methods=['GET'])
+@application.route("/auth", methods=['GET'])
 def auth():
     code = request.args.get("code")
     state = request.args.get("state")
@@ -40,14 +41,13 @@ def auth():
         return "Request could not be validated"
 
 
-@app.route("/fork", methods=['GET'])
+@application.route("/fork", methods=['GET'])
 def fork():
     access_token = session['github_access_token']
     headers = {'Authorization': f'token {access_token}'}
-    res = post("https://api.github.com/repos/kyrick/godot-simple-ui/forks", headers=headers)
+    res = post(AppConfig.repo_fork_endpoint, headers=headers)
     return "forked"
 
 
 if __name__ == "__main__":
-    app.config.from_object(AppConfig.flask)
-    app.run()
+    application.run()
