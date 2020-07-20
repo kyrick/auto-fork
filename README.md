@@ -8,11 +8,21 @@ Once authentication is complete the user can click a button to fork the code bas
 
 # Rationale and Decisions
 
+*For development:* I chose Flask. It's widely adopted, has reasonable documentation and it's quick to get up and running.
+I chose Pytest for unit tests primarily because pytest fixtures are useful for Flask. Additionally monkeypatch is extremely useful for mocks.
 
+*For builds:* I chose DockerHub's GitLab integration. It's simple to get up and running. It fit the scope of this project nicely.
+I opted against version tagging. While critical for a production applications, it was beyond the scope required by this project.
+
+*For deployments:* I chose Elastic Beanstalk because it has a free tier and handles routing/load balancing.
+I chose Docker for deploying the actual code. Technically EB does work with a zipped directory of python code and requirements.txt. 
+However, it's a lot saner and safer to deploy a Docker image with the environment pre-baked. This way I can validate dependencies are installed correctly and test the build locally.
+I have more confidence that it will behave as I expect it to in production. I also get more control over the entry point and how the application will be run in production. 
+I prefer deploying an application complete with it's runtime environment when it's feasible.
 
 # Tests
 
-Unit tests are built with pytest and live under `auto_fork/tests/`
+Unit tests are built on pytest and live under `auto_fork/tests/`
 * `test_app.py` contains the Auto Fork unit tests
 * `mock_response.py` is used for mocking responses from GitHub in unit tests. example: monkeypatch.setattr(requests, "post", mock_post(202, {'some', 'data'})
 
@@ -23,7 +33,7 @@ To execute tests:
 
 # Run locally
 
-Before running locally, you will need a GitHub OAuth app. [Learn more about setting one up here.](https://docs.github.com/en/developers/apps/creating-an-oauth-app)
+Before running, you will need a GitHub OAuth app. [Learn more about setting one up here.](https://docs.github.com/en/developers/apps/creating-an-oauth-app)
 
 1. Configure the GitHub OAuth 
     * Homepage URL: http://localhost:5000/
@@ -42,7 +52,7 @@ Auto Fork is deployed to elastic beanstalk Docker runtime with the EB manifest f
 
 1. Create an EB environment utilizing the Docker platform
 1. Upload manifest `deploy/Dockerrun.aws.json`
-1. Configure environment variables for AF_CLIENT_ID and AF_CLIENT_SECRET  
+1. Configure environment variables for AF_CLIENT_ID and AF_CLIENT_SECRET
 
 # Build
 
@@ -61,7 +71,7 @@ AF_CLIENT_ID: GitHub OAuth app client ID (get this from GitHub)
 AF_CLIENT_SECRET: GitHub OAuth app client secret (get this from GitHub)
 
 Optional
-AF_FORK_ENDPOINT: Public repo to be forked. Format: https://api.github.com/repos/:user-name/:repo-name/forks
+AF_FORK_ENDPOINT: Public repo to be forked. Format: https://api.github.com/repos/:user_name/:repo_name/forks
 AF_AUTH_ENDPOINT: The GitHub endpoint for OAuth app Authorization
 AF_TOKEN_ENDPOINT: The GitHub endpoint for user Access Tokens after Authorization has been granted 
 ```
