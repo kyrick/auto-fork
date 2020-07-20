@@ -4,8 +4,7 @@ import requests
 from urllib import parse
 from waitress import serve
 import uuid
-
-from config import AppConfig
+from auto_fork.config import AppConfig
 
 app = Flask(__name__, template_folder='templates')
 app.config.from_object(AppConfig.flask)

@@ -2,8 +2,8 @@ import pytest
 from flask import Response, template_rendered
 from contextlib import contextmanager
 import requests
-from app import app
-from tests.mock_response import mock_post
+from auto_fork.app import app
+from tests.util import mock_post
 
 
 # Borrowed with love from https://stackoverflow.com/questions/23987564/test-flask-render-template-context
